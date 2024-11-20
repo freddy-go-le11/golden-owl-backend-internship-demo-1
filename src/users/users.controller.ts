@@ -6,12 +6,13 @@ import {
   Patch,
   Param,
   Delete,
-  BadRequestException,
+  ParseIntPipe,
+  NotFoundException,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { isNumber } from 'class-validator';
+import { instanceToPlain } from 'class-transformer';
 
 @Controller('users')
 export class UsersController {
@@ -24,28 +25,26 @@ export class UsersController {
 
   @Get()
   findAll() {
-    return this.userService.findAll();
+    return instanceToPlain(this.userService.findAll());
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    if (!isNumber(+id)) throw new BadRequestException('Invalid id');
-
-    return this.userService.findOne(+id);
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return instanceToPlain(this.userService.findOne(id));
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    if (!isNumber(+id)) throw new BadRequestException('Invalid id');
-    if (!updateUserDto) throw new BadRequestException('Invalid request body');
-
-    return this.userService.update(+id, updateUserDto);
+  async update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
+    const { affected } = await this.userService.update(id, updateUserDto);
+    if (!affected) throw new NotFoundException(`User with id ${id} not found`);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    if (!isNumber(+id)) throw new BadRequestException('Invalid id');
-
-    return this.userService.remove(+id);
+  async remove(@Param('id', ParseIntPipe) id: number) {
+    const { affected } = await this.userService.remove(id);
+    if (!affected) throw new NotFoundException(`User with id ${id} not found`);
   }
 }
