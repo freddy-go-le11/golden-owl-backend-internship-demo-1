@@ -28,13 +28,11 @@ export class UsersService {
     return user;
   }
 
-  async update(id: number, updateUserDto: UpdateUserDto) {
-    const { affected } = await this.userRepository.update(id, updateUserDto);
-    if (!affected) throw new NotFoundException(`User with id ${id} not found`);
+  update(id: number, updateUserDto: UpdateUserDto) {
+    return this.userRepository.update(id, updateUserDto);
   }
 
-  async remove(id: number) {
-    const { affected } = await this.userRepository.delete(id);
-    if (!affected) throw new NotFoundException(`User with id ${id} not found`);
+  remove(id: number) {
+    return this.userRepository.delete(id);
   }
 }
