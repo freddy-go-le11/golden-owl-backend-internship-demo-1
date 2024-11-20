@@ -34,11 +34,8 @@ export class UsersService {
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {
-    let user = await this.userRepository.findOneBy({ id });
-    if (!user) throw new NotFoundException(`User with id ${id} not found`);
-
-    user = { ...user, ...updateUserDto };
-    return this.userRepository.save(user);
+    const { affected } = await this.userRepository.update(id, updateUserDto);
+    if (!affected) throw new NotFoundException(`User with id ${id} not found`);
   }
 
   async remove(id: number) {
