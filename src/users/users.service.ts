@@ -13,7 +13,7 @@ export class UsersService {
   ) {}
 
   create(createUserDto: CreateUserDto): Promise<User> {
-    const user: User = new User();
+    const user = new User();
     user.name = createUserDto.name;
     user.age = createUserDto.age;
     user.email = createUserDto.email;

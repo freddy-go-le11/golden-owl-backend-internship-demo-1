@@ -1,3 +1,4 @@
+import { ENUM_GENDER } from 'src/common/enum';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
@@ -20,11 +21,11 @@ export class User {
   @Column({ type: 'int', nullable: true })
   age: number;
 
-  @Column({ type: 'enum', enum: ['m', 'f', 'u'], default: 'u' })
+  @Column({ type: 'enum', enum: ENUM_GENDER, default: ENUM_GENDER.UNKNOWN })
   /**
    * m - male
    * f - female
    * u - unspecified
    */
-  gender: string;
+  gender: ENUM_GENDER;
 }

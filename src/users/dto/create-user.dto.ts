@@ -8,6 +8,7 @@ import {
   Matches,
   MinLength,
 } from 'class-validator';
+import { ENUM_GENDER } from 'src/common/enum';
 
 const passwordRegEx =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*d)(?=.*[@$!%*?&])[A-Za-zd@$!%*?&]{8,20}$/;
@@ -33,8 +34,8 @@ export class CreateUserDto {
   age: number;
 
   @IsString()
-  @IsEnum(['f', 'm', 'u'])
-  gender: string;
+  @IsEnum(ENUM_GENDER)
+  gender: ENUM_GENDER;
 
   @IsNotEmpty()
   @Matches(passwordRegEx, {
