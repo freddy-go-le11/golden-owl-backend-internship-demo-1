@@ -35,7 +35,7 @@ export class AuthService {
 
     const newPassword = await hash(_user.password, 10);
     const user = await this.userRepository.save({
-      _user,
+      ..._user,
       password: newPassword,
     });
     return user;
