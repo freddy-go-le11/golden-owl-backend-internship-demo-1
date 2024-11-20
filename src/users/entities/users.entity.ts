@@ -1,11 +1,9 @@
+import { Exclude } from 'class-transformer';
 import { ENUM_GENDER } from 'src/common/enum';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class User {
-  /**
-   * this decorator will help to auto generate id for the table.
-   */
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -15,6 +13,7 @@ export class User {
   @Column({ type: 'varchar', length: 40 })
   email: string;
 
+  @Exclude()
   @Column({ type: 'varchar' })
   password: string;
 
@@ -22,10 +21,5 @@ export class User {
   age: number;
 
   @Column({ type: 'enum', enum: ENUM_GENDER, default: ENUM_GENDER.UNKNOWN })
-  /**
-   * m - male
-   * f - female
-   * u - unspecified
-   */
   gender: ENUM_GENDER;
 }

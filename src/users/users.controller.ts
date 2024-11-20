@@ -11,6 +11,7 @@ import {
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { instanceToPlain } from 'class-transformer';
 
 @Controller('users')
 export class UsersController {
@@ -23,12 +24,12 @@ export class UsersController {
 
   @Get()
   findAll() {
-    return this.userService.findAll();
+    return instanceToPlain(this.userService.findAll());
   }
 
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.userService.findOne(id);
+    return instanceToPlain(this.userService.findOne(id));
   }
 
   @Patch(':id')

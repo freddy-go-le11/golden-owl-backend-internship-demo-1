@@ -17,16 +17,11 @@ export class UsersService {
     return this.userRepository.save(user);
   }
 
-  async findAll(): Promise<Partial<User>[]> {
-    const users = await this.userRepository.find();
-    return users.map((user) => ({
-      id: user.id,
-      name: user.name,
-      email: user.email,
-    }));
+  findAll(): Promise<User[]> {
+    return this.userRepository.find();
   }
 
-  async findOne(id: number): Promise<User | null> {
+  async findOne(id: number): Promise<User> {
     const user = await this.userRepository.findOneBy({ id });
     if (!user) throw new NotFoundException(`User with id ${id} not found`);
 
