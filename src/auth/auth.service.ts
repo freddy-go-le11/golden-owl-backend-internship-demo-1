@@ -20,7 +20,7 @@ export class AuthService {
     const user = await this.userRepository.findOneBy({ email });
     if (!user) throw new UnauthorizedException('User not found');
 
-    const isPasswordValid = compare(password, user.password);
+    const isPasswordValid = await compare(password, user.password);
     if (!isPasswordValid) throw new UnauthorizedException('Invalid password');
 
     return user;
