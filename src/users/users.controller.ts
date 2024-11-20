@@ -6,12 +6,11 @@ import {
   Patch,
   Param,
   Delete,
-  BadRequestException,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { isNumber } from 'class-validator';
 
 @Controller('users')
 export class UsersController {
@@ -28,24 +27,20 @@ export class UsersController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    if (!isNumber(+id)) throw new BadRequestException('Invalid id');
-
-    return this.userService.findOne(+id);
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.userService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    if (!isNumber(+id)) throw new BadRequestException('Invalid id');
-    if (!updateUserDto) throw new BadRequestException('Invalid request body');
-
-    return this.userService.update(+id, updateUserDto);
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
+    return this.userService.update(id, updateUserDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    if (!isNumber(+id)) throw new BadRequestException('Invalid id');
-
-    return this.userService.remove(+id);
+  remove(@Param('id', ParseIntPipe) id: number) {
+    return this.userService.remove(id);
   }
 }
