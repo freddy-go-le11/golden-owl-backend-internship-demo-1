@@ -3,11 +3,11 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { UserLoginDTO } from '../../common/dto/login.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/users/entities/users.entity';
 import { Repository } from 'typeorm';
 import { compare, hash } from 'bcrypt';
+import { UserLoginDTO, UserRegisterDTO } from 'common/dto';
 
 @Injectable()
 export class AuthService {
@@ -26,18 +26,19 @@ export class AuthService {
     return user;
   }
 
-  async register(_user: Pick<User, 'name' | 'email' | 'password'>) {
+  async register(userRegisterDTO: UserRegisterDTO) {
     const existsUser = await this.userRepository.findOneBy({
-      email: _user.email,
+      email: userRegisterDTO.email,
     });
 
     if (existsUser) throw new ConflictException('User already exists');
 
-    const newPassword = await hash(_user.password, 10);
-    const user = await this.userRepository.save({
-      ..._user,
+    const newPassword = await hash(userRegisterDTO.password, 10);
+    const newUserData = await this.userRepository.save({
+      ...userRegisterDTO,
       password: newPassword,
     });
+    const user = await this.userRepository.save(newUserData);
     return user;
   }
 }
