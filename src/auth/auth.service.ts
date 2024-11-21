@@ -16,11 +16,13 @@ export class AuthService {
     private readonly userRepository: Repository<User>,
   ) {}
 
-  async login({ email, password }: UserLoginDTO) {
-    const user = await this.userRepository.findOneBy({ email });
+  async login(userLoginDTO: UserLoginDTO) {
+    const user = await this.userRepository.findOneBy({
+      email: userLoginDTO.email,
+    });
     if (!user) throw new UnauthorizedException('User not found');
 
-    const isPasswordValid = await compare(password, user.password);
+    const isPasswordValid = await compare(userLoginDTO.password, user.password);
     if (!isPasswordValid) throw new UnauthorizedException('Invalid password');
 
     // TODO: Implement JWT token generation, this service not depends on controller
