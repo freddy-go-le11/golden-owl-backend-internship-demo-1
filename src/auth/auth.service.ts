@@ -23,6 +23,7 @@ export class AuthService {
     const isPasswordValid = await compare(password, user.password);
     if (!isPasswordValid) throw new UnauthorizedException('Invalid password');
 
+    // TODO: Implement JWT token generation, this service not depends on controller
     return user;
   }
 
