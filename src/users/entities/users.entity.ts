@@ -21,6 +21,6 @@ export class User {
   @Column({ type: 'int', nullable: true })
   age: number;
 
-  @Column({ type: 'enum', enum: ENUM_GENDER, default: ENUM_GENDER.UNKNOWN })
+  @Column({ type: 'enum', enum: ENUM_GENDER, default: ENUM_GENDER.Unknown })
   gender: ENUM_GENDER;
 }

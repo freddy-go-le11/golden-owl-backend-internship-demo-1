@@ -8,6 +8,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/users.entity';
 import { QueryFailedError, Repository } from 'typeorm';
+import { POSTGRES_ERROR_CODE } from 'src/common/enum';
 
 @Injectable()
 export class UsersService {
@@ -23,12 +24,11 @@ export class UsersService {
     } catch (error) {
       if (
         error instanceof QueryFailedError &&
-        error.driverError.code === '23505'
+        error.driverError.code === POSTGRES_ERROR_CODE.UniqueViolation
       ) {
-        // 23505 is the PostgreSQL error code for unique violation
         throw new ConflictException('Email already exists');
       }
-      throw error; // Rethrow the error if it's not related to the unique constraint
+      throw error;
     }
   }
 
