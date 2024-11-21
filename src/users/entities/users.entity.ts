@@ -1,6 +1,13 @@
+import { hash } from 'bcrypt';
 import { Exclude } from 'class-transformer';
 import { ENUM_GENDER } from 'src/common/enum';
-import { Column, Entity, PrimaryGeneratedColumn, Unique } from 'typeorm';
+import {
+  BeforeInsert,
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
+  Unique,
+} from 'typeorm';
 
 @Entity()
 @Unique(['email'])
@@ -23,4 +30,11 @@ export class User {
 
   @Column({ type: 'enum', enum: ENUM_GENDER, default: ENUM_GENDER.Unknown })
   gender: ENUM_GENDER;
+
+  @BeforeInsert()
+  async hashPassword() {
+    if (this.password) {
+      this.password = await hash(this.password, 10);
+    }
+  }
 }
