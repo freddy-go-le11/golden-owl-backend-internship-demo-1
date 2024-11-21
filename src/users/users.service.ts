@@ -43,8 +43,13 @@ export class UsersService {
     return user;
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return this.userRepository.update(id, updateUserDto);
+  async update(id: number, updateUserDto: UpdateUserDto): Promise<User> {
+    const user = await this.userRepository.findOneBy({ id });
+    if (!user) throw new NotFoundException(`User with id ${id} not found`);
+
+    const updatedUser = this.userRepository.merge(user, updateUserDto);
+
+    return await this.userRepository.save(updatedUser);
   }
 
   remove(id: number) {

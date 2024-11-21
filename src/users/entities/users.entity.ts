@@ -3,6 +3,7 @@ import { Exclude } from 'class-transformer';
 import { ENUM_GENDER } from 'src/common/enum';
 import {
   BeforeInsert,
+  BeforeUpdate,
   Column,
   Entity,
   PrimaryGeneratedColumn,
@@ -32,6 +33,7 @@ export class User {
   gender: ENUM_GENDER;
 
   @BeforeInsert()
+  @BeforeUpdate()
   async hashPassword() {
     if (this.password) {
       this.password = await hash(this.password, 10);

@@ -20,7 +20,7 @@ export class UsersController {
 
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
+    return instanceToPlain(this.userService.create(createUserDto));
   }
 
   @Get()
@@ -38,8 +38,7 @@ export class UsersController {
     @Param('id', ParseIntPipe) id: number,
     @Body() updateUserDto: UpdateUserDto,
   ) {
-    const { affected } = await this.userService.update(id, updateUserDto);
-    if (!affected) throw new NotFoundException(`User with id ${id} not found`);
+    return instanceToPlain(this.userService.update(id, updateUserDto));
   }
 
   @Delete(':id')
