@@ -1,6 +1,7 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { UserLoginDTO, UserRegisterDTO } from 'common/dto';
+import { instanceToPlain } from 'class-transformer';
 
 @Controller('auth')
 export class AuthController {
@@ -8,11 +9,11 @@ export class AuthController {
 
   @Post('login')
   async login(@Body() userLoginDTO: UserLoginDTO) {
-    return this.authService.login(userLoginDTO);
+    return instanceToPlain(this.authService.login(userLoginDTO));
   }
 
   @Post('register')
   async register(@Body() userRegisterDTP: UserRegisterDTO) {
-    return this.authService.register(userRegisterDTP);
+    return instanceToPlain(this.authService.register(userRegisterDTP));
   }
 }
